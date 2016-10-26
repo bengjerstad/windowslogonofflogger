@@ -2,6 +2,7 @@
 Project to log logons and logoffs of windows users to detect if a password has been compromised. 
 
 This project is broken up into 2 parts:
+
 1. Client script to gather info and send an HTTP request to the server.
 The client script is a batch file that gets username, IPaddress, computername date and time 
 the script calls a javascript file to send the gathered info in a HTTP request to the server. 
