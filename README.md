@@ -11,3 +11,22 @@ the script calls a javascript file to send the gathered info in a HTTP request t
 The server is a hug server: http://www.hug.rest/ 
 the hug server exposes a RESTFUL API and allows the logging and data analysis to take place in python. 
 The python code pushes and pulls from a sqlite3 database file. 
+
+Setup/Install
+Set up server:
+1. Install python and hug on a server.
+2. Copy server files to the server.
+  I copied the files to my user folder at /home/admin
+3. Run the makedb.py script to write the database file.
+4. run and test:
+  hug -f 'home/admin/myapiwithdb.py'
+
+Set up login scripts for windows domain.
+1. Add the scripts to the login and logoff of grouppolicy
+(https://technet.microsoft.com/en-us/library/cc770908(v=ws.11).aspx)
+2. run and test
+
+I had to make a change to the logon and logoff script because the batch file was not finding wget.js
+I used:
+\\[domain]\SysVol\anderson.ketsds.net\Policies\[sid]\User\Scripts\Logon\wget.js
+instead of wget.js
