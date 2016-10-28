@@ -22,7 +22,15 @@ def get_log(username: hug.types.text, compname: hug.types.text,hug_timer=3):
 	c = conn.cursor()
 	logs = {}
 	dbkeys = ['username','compname','stat','time']
-	for idx,row in enumerate(c.execute("SELECT * FROM users WHERE 1")):
+	if(data2==('all','all')):
+		where = "1"
+	if(data2[0]=='all' and data2[1]!='all'):
+		where = "compname=' "+compname+" '"
+	if(data2[1]=='all' and data2[0]!='all'):
+		where = "username = ' "+username+" '"
+	if(data2[1]!='all' and data2[0]!='all'):
+		where = "username=' "+username+" ' AND compname=' "+compname+" '"
+	for idx,row in enumerate(c.execute("SELECT * FROM users WHERE "+where)):
 		logs[idx] = dict(zip(dbkeys,row))
 	return logs
 
