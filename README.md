@@ -29,9 +29,19 @@ Set up server:
 2. Copy server files to the server.
   I copied the files to my user folder at /home/admin
 3. Run the makedb.py script to write the database file.
-4. run and test:
+4. Run and test:
+  Run
+  ```
   hug -f 'home/admin/myapiwithdb.py'
-
+  ```
+  Test
+  Open up a browser and enter:
+  http://10.24.25.130:8000/log_this?username=bgjerstad&compname=011acboe&stat=on&time=2016-10-20_0229 PM
+  to test the logging.
+  In a browser enter:
+  http://10.24.25.130:8000/get_log?username=bgjerstad&compname=011acboe
+  to test getting the logs out of the server. 
+  
 Set up login scripts for windows domain:
 
 1. Add the scripts to the login and logoff of grouppolicy
