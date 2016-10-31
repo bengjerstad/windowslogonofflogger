@@ -10,7 +10,11 @@ c = conn.cursor()
 def log_this(username: hug.types.text, compname: hug.types.text,stat: hug.types.text,time: hug.types.text,  hug_timer=3):
 	data = {'username':'{0}'.format(username),'compname':'{0}'.format(compname),'stat':'{0}'.format(stat),'time':'{0}'.format(time)}
 	data2 = (username,compname,stat,time)
-	c.execute("INSERT INTO users VALUES "+str(data2))
+	try:
+		c.execute("INSERT INTO users VALUES "+str(data2))
+	except sqlite3.OperationalError:
+		makedb()
+		c.execute("INSERT INTO users VALUES "+str(data2))
 	conn.commit()
 	return data
 
@@ -30,7 +34,12 @@ def get_log(username: hug.types.text, compname: hug.types.text,hug_timer=3):
 		where = "username = ' "+username+" '"
 	if(data2[1]!='all' and data2[0]!='all'):
 		where = "username=' "+username+" ' AND compname=' "+compname+" '"
-	for idx,row in enumerate(c.execute("SELECT * FROM users WHERE "+where)):
+	try:
+		dbout = c.execute("SELECT * FROM users WHERE "+where)
+	except sqlite3.OperationalError:
+		makedb()
+		dbout = c.execute("SELECT * FROM users WHERE "+where)
+	for idx,row in enumerate(dbout):
 		logs[idx] = dict(zip(dbkeys,row))
 	return logs
 
@@ -43,7 +52,12 @@ def get_dup(hug_timer=3):
 	exlist = [' star ',' tneurohr ']
 	#get a list of all of the users
 	userlist = []
-	for idx,row in enumerate(c.execute("SELECT DISTINCT username FROM users WHERE 1")):
+	try:
+		dbout = c.execute("SELECT DISTINCT username FROM users WHERE 1")
+	except sqlite3.OperationalError:
+		makedb()
+		dbout = c.execute("SELECT DISTINCT username FROM users WHERE 1")
+	for idx,row in enumerate(dbout):
 		if not(row[0] in exlist):
 			userlist.append(row[0])
 	#for each user:
@@ -70,3 +84,10 @@ def db(action: hug.types.text, hug_timer=3):
 	c.execute('''Create Table users (username text,compname text,stat text,time text)''')
 	conn.commit()
 	return 1
+
+def makedb():
+	conn = sqlite3.connect('users.db')
+	c = conn.cursor()
+	c.execute('''Create Table users (username text,compname text,stat text,time text)''')
+	conn.commit()
+
