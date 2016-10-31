@@ -51,12 +51,4 @@ Set up login scripts for windows domain:
 
 1. Add the scripts to the login and logoff of grouppolicy
  (https://technet.microsoft.com/en-us/library/cc770908(v=ws.11).aspx)
-2. run and test
-
-I had to make a change to the logon and logoff script because the batch file was not finding wget.js
- I used
- ```
-  \\[domain]\SysVol\anderson.ketsds.net\Policies\[sid]\User\Scripts\Logon\wget.js
-  
-```
-instead of wget.js
+2. Run and test
