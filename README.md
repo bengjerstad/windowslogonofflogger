@@ -33,13 +33,20 @@ Set up server:
   Run
   ```
   hug -f 'home/admin/myapiwithdb.py'
+  
   ```
   Test
+  
   Open up a browser and enter:
+  
   http://10.24.25.130:8000/log_this?username=bgjerstad&compname=011acboe&stat=on&time=2016-10-20_0229 PM
+  
   to test the logging.
+  
   In a browser enter:
+  
   http://10.24.25.130:8000/get_log?username=bgjerstad&compname=011acboe
+  
   to test getting the logs out of the server. 
   
 Set up login scripts for windows domain:
@@ -50,5 +57,8 @@ Set up login scripts for windows domain:
 
 I had to make a change to the logon and logoff script because the batch file was not finding wget.js
  I used
+ ```
   \\[domain]\SysVol\anderson.ketsds.net\Policies\[sid]\User\Scripts\Logon\wget.js
+  
+```
 instead of wget.js
