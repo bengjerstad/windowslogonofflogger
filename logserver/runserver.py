@@ -37,8 +37,6 @@ def get_log(username: hug.types.text, compname: hug.types.text,hug_timer=3):
 @hug.get(examples='')
 @hug.local()
 def get_dup(hug_timer=3):
-	#data2 = (username)
-	#print(data2)
 	logs = {}
 	dbkeys = ['compname','time','stat']
 	#get a list of all of the users
@@ -59,6 +57,4 @@ def get_dup(hug_timer=3):
 					thisis = user+row[1]
 					logs[thisis] = dict(zip(dbkeys,row))
 				last = row[2]
-	#for idx,row in enumerate(c.execute("SELECT * FROM users WHERE 1")):
-		#logs[idx] = dict(zip(dbkeys,row))
 	return logs
