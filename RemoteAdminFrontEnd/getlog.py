@@ -22,6 +22,6 @@ for idx,x in enumerate(df['time']):
 	#print(dt)
 print(df.columns.values)
 del df['time']
-df['date time'] = pd.Series(dt)
+df['date time'] = dt
 
 print(df)
