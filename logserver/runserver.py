@@ -39,10 +39,13 @@ def get_log(username: hug.types.text, compname: hug.types.text,hug_timer=3):
 def get_dup(hug_timer=3):
 	logs = {}
 	dbkeys = ['compname','time','stat']
+	#exclustion list
+	exlist = [' star ',' tneurohr ']
 	#get a list of all of the users
 	userlist = []
 	for idx,row in enumerate(c.execute("SELECT DISTINCT username FROM users WHERE 1")):
-		userlist.append(row[0])
+		if not(row[0] in exlist):
+			userlist.append(row[0])
 	#for each user:
 	# check if user has loged on twice but not logged off.
 	for idx,user in enumerate(userlist):
