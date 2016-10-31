@@ -58,3 +58,12 @@ def get_dup(hug_timer=3):
 					logs[thisis] = dict(zip(dbkeys,row))
 				last = row[2]
 	return logs
+
+@hug.get(examples='action=clear')
+@hug.local()
+def db(action: hug.types.text, hug_timer=3):
+	#drop the table then recreate it.
+	c.execute("DROP TABLE users")
+	c.execute('''Create Table users (username text,compname text,stat text,time text)''')
+	conn.commit()
+	return 1
