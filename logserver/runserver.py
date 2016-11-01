@@ -78,12 +78,15 @@ def get_dup(hug_timer=3):
 		logcnt = len(dbout)	
 		if(logcnt > 1):
 			last = ''
+			lastcomp = ''
 			for row in dbout:
-				if(row[2]==last):
+				if(row[2]==last and not(row[0]==lastcomp)):
 					#print(user,row)
 					thisis = user+row[1]
 					logs[thisis] = dict(zip(dbkeys,row))
 				last = row[2]
+				lastcomp = row[0]
+				
 	return logs
 
 @hug.get(examples='action=clear')
