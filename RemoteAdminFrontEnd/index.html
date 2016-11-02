@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#getdup").click(function(){
+        $.getJSON("http://10.24.25.130:8000/get_dup", function(result){
+			 $.each( result, function( key, val ) {
+				username = key.split(" ")[0];
+				$("div").append("<li>"+username+ "</li>");
+			});
+        });
+    });
+});
+</script>
+<style>
+ul {
+  list-style-type: none;
+}
+</style>
+</head>
+<body>
+<ul>
+<li><a href="#" id="getdup">Get Duplicates</a></li>
+<!--
+<li><a href="#" id="getlog">Get Log</a> Username:<input id="username" value="all"/> Computername:<input id="compname" value="all"/></li>
+<li><a href="#" id="getex">Clear Entire Log</a></li>
+
+<li><a href="#" id="getex">Get Exclusion List</a></li>
+<li><a href="#" id="clearex">Clear Exclusion List</a></li>
+<li><a href="#" id="addex">Add to Exclusion List</a> Username:<input id="exusername"/><li>
+-->
+
+<div></div>
+
+</body>
+</html>
