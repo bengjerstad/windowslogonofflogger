@@ -5,6 +5,11 @@ import pandas as pd
 conn = sqlite3.connect('users.db')
 c = conn.cursor()
 
+@hug.directive()
+def cors(support='*', response=None, **kwargs):
+    '''Returns passed in parameter multiplied by itself'''
+    response and response.set_header('Access-Control-Allow-Origin', support)
+
 @hug.get(examples='username=bgjerstad&compname=011acboe&stat=on&time=2016-10-20_0229 PM')
 @hug.local()
 def log_this(username: hug.types.text, compname: hug.types.text,stat: hug.types.text,time: hug.types.text,  hug_timer=3):
@@ -45,7 +50,7 @@ def get_log(username: hug.types.text, compname: hug.types.text,hug_timer=3):
 
 @hug.get(examples='')
 @hug.local()
-def get_dup(hug_timer=3):
+def get_dup(hug_cors,hug_timer=3):
 	logs = {}
 	dbkeys = ['compname','time','stat']
 	#exclustion list
