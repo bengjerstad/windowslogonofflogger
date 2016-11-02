@@ -6,12 +6,36 @@
 SERVERIP = '10.24.25.130';
 
 $(document).ready(function(){
+
     $("#getdup").click(function(){
         $.getJSON("http://"+SERVERIP+":8000/get_dup", function(result){
 			$("#main").html('');
 			$.each( result, function( key, val ) {
 				username = key.split(" ")[0];
-				$("#main").append("<li>"+username+ "</li>");
+				link = "<a href='#' class='dupitem'>"+username+ "</a>"
+				$("#main").append("<li>"+link+"</li>");
+			});
+			$(".dupitem").click(function(){
+				username = $(this).text();
+				$(".selected").removeClass( "selected" );
+				$(this).addClass( "selected" );
+				$("#exusername").val(username);
+				$.getJSON("http://"+SERVERIP+":8000/get_log?username="+username+"&compname=all", function(result){
+					$("#logview").html("");
+					$("#logview").append("<table>");
+					$.each( result, function( key, val ) {
+					datetime = val.time;
+					datetime = datetime.split("_");
+					date = datetime[0].split("-");
+					date[0] = date[0].substring(1, 5);
+					date = date[1]+"/"+date[2]+"/"+date[0];
+					timeh = datetime[1].substring(0, 2);
+					timem = datetime[1].substring(2, 4);
+						$("#logview").append("<tr><td>"+val.username+" </td><td> "+val.compname+" </td><td> "+val.stat+" </td><td> "+timeh+":"+timem+" </td><td> "+date+" </td></tr>");
+					});
+				});
+				
+				
 			});
         });
     });
@@ -27,10 +51,11 @@ $(document).ready(function(){
 		 $("#addex").click(function(){
 		 un = $("#exusername").val();
         $.getJSON("http://"+SERVERIP+":8000/ex_this?username="+un+"&action=add&lvl=none", function(result){
-			username = result[0]
+			username = result
 			$("#exlist").append("<li>"+username+ "</li>");
         });
     });
+
 });
 </script>
 <style>
@@ -44,11 +69,35 @@ div{
 	height:100%;
 	position: relative;
 }
+td{
+	padding: .5em;
+	border-bottom: 1px solid #ddd;
+}
+.selected{
+	background-color: #cccccc;
+}
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+	background-color: #eeeeee;
+}
+
+a:active {
+    text-decoration: underline;
+	background-color: #cccccc;
+}
 </style>
 </head>
 <body>
 <ul>
-<li><a href="#" id="getdup">Get Duplicates</a></li>
+
 <!--
 <li><a href="#" id="getlog">Get Log</a> Username:<input id="username" value="all"/> Computername:<input id="compname" value="all"/></li>
 <li><a href="#" id="getex">Clear Entire Log</a></li>
@@ -56,8 +105,11 @@ div{
 <li><a href="#" id="clearex">Clear Exclusion List</a></li>
 
 -->
-
+<div id="leftpan" style="float:left;">
+<li><a href="#" id="getdup">Get Duplicates</a></li>
 <div id="main"></div>
+</div>
+<div id="logview" style="width:30em;"></div>
 <div id="rightpan" style="float:right;">
 <ul id="exnav" style="width:100%;">
 		<li><a href="#" id="getex" >Get Exclusion List</a></li>
@@ -65,6 +117,6 @@ div{
 	</ul>
 <div id="exlist">
 </div>
-
 </body>
 </html>
+	
