@@ -3,13 +3,32 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script>
+SERVERIP = '10.24.25.130';
+
 $(document).ready(function(){
     $("#getdup").click(function(){
-        $.getJSON("http://10.24.25.130:8000/get_dup", function(result){
-			 $.each( result, function( key, val ) {
+        $.getJSON("http://"+SERVERIP+":8000/get_dup", function(result){
+			$("#main").html('');
+			$.each( result, function( key, val ) {
 				username = key.split(" ")[0];
-				$("div").append("<li>"+username+ "</li>");
+				$("#main").append("<li>"+username+ "</li>");
 			});
+        });
+    });
+	 $("#getex").click(function(){
+        $.getJSON("http://"+SERVERIP+":8000/ex_this?username=none&action=list&lvl=none", function(result){
+			$("#exlist").html("");
+			$.each( result, function( key, val ) {
+				username = val.username;
+				$("#exlist").append("<li>"+username+ "</li>");
+			});
+        });
+    });
+		 $("#addex").click(function(){
+		 un = $("#exusername").val();
+        $.getJSON("http://"+SERVERIP+":8000/ex_this?username="+un+"&action=add&lvl=none", function(result){
+			username = result[0]
+			$("#exlist").append("<li>"+username+ "</li>");
         });
     });
 });
@@ -17,6 +36,13 @@ $(document).ready(function(){
 <style>
 ul {
   list-style-type: none;
+}
+div{
+	float:left;
+	max-width:49%;
+	width:15em;
+	height:100%;
+	position: relative;
 }
 </style>
 </head>
@@ -27,12 +53,18 @@ ul {
 <li><a href="#" id="getlog">Get Log</a> Username:<input id="username" value="all"/> Computername:<input id="compname" value="all"/></li>
 <li><a href="#" id="getex">Clear Entire Log</a></li>
 
-<li><a href="#" id="getex">Get Exclusion List</a></li>
 <li><a href="#" id="clearex">Clear Exclusion List</a></li>
-<li><a href="#" id="addex">Add to Exclusion List</a> Username:<input id="exusername"/><li>
+
 -->
 
-<div></div>
+<div id="main"></div>
+<div id="rightpan" style="float:right;">
+<ul id="exnav" style="width:100%;">
+		<li><a href="#" id="getex" >Get Exclusion List</a></li>
+		<li><input id="exusername"/><br/><a href="#" id="addex">Add to Exclusion List</a><li>
+	</ul>
+<div id="exlist">
+</div>
 
 </body>
 </html>
