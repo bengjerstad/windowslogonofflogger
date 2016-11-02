@@ -25,7 +25,7 @@ def log_this(username: hug.types.text, compname: hug.types.text,stat: hug.types.
 
 @hug.get(examples='username=bgjerstad&compname=011acboe')
 @hug.local()
-def get_log(username: hug.types.text, compname: hug.types.text,hug_timer=3):
+def get_log(hug_cors,username: hug.types.text, compname: hug.types.text,hug_timer=3):
 	data2 = (username,compname)
 	print(data2)
 	c = conn.cursor()
@@ -64,7 +64,6 @@ def get_dup(hug_cors,hug_timer=3):
 		c.execute("SELECT DISTINCT username FROM exclude WHERE 1")
 		exlist = c.fetchall()
 		exlist = [x[0] for x in exlist]
-	print('exlist',exlist)
 	#get a list of all of the users
 	userlist = []
 	try:
@@ -91,12 +90,11 @@ def get_dup(hug_cors,hug_timer=3):
 					logs[thisis] = dict(zip(dbkeys,row))
 				last = row[2]
 				lastcomp = row[0]
-				
 	return logs
 
 @hug.get(examples='action=clear')
 @hug.local()
-def db(action: hug.types.text, hug_timer=3):
+def db(hug_cors,action: hug.types.text, hug_timer=3):
 	#drop the table then recreate it.
 	c.execute("DROP TABLE users")
 	c.execute('''Create Table users (username text,compname text,stat text,time text)''')
@@ -105,9 +103,11 @@ def db(action: hug.types.text, hug_timer=3):
 
 @hug.get(examples='username=bgjerstad&action=add&lvl=dup')
 @hug.local()
-def ex_this(username: hug.types.text, action: hug.types.text, lvl: hug.types.text,hug_timer=3):
+def ex_this(hug_cors,username: hug.types.text, action: hug.types.text, lvl: hug.types.text,hug_timer=3):
 	data = {'username':'{0}'.format(username),'action':'{0}'.format(action),'lvl':'{0}'.format(lvl)}
 	data2 = (username, lvl)
+	logs = {}
+	dbkeys = ['username']
 	if (action == 'add'):
 		try:
 			c.execute("INSERT INTO exclude VALUES "+str(data2))
@@ -117,6 +117,16 @@ def ex_this(username: hug.types.text, action: hug.types.text, lvl: hug.types.tex
 	data2 = (username, lvl)
 	if (action == 'remove'):
 		c.execute("DELETE FROM exclude WHERE username='"+str(data2[0])+"'")
+	if (action == 'list'):
+			exlist = []
+			try:
+				dbout = c.execute("SELECT DISTINCT username FROM exclude WHERE 1")
+			except sqlite3.OperationalError:
+				makedb()
+				dbout = c.execute("SELECT DISTINCT username FROM exclude WHERE 1")
+			for idx,row in enumerate(dbout):
+				logs[idx] = dict(zip(dbkeys,row))
+			data = logs
 	conn.commit()
 	return data
 
