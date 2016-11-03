@@ -44,7 +44,7 @@ $(document).ready(function(){
         });
     });
 	 $("#getex").click(function(){
-        $.getJSON("http://"+SERVERIP+":8000/ex_this?username=none&action=list&lvl=none", function(result){
+        $.getJSON("http://"+SERVERIP+":8000/ex_this?username=none&action=list", function(result){
 			$("#exlist").html("");
 			$("#stattxt").text('List of excluded users received.');
 			$.each( result, function( key, val ) {
@@ -54,7 +54,7 @@ $(document).ready(function(){
 					username = $(this).text();
 					$("#exusername").val(username);
 					$("#exnav").removeClass('hidden');
-					$.getJSON("http://"+SERVERIP+":8000/ex_this?username="+username+"&action=remove&lvl=none", function(result){
+					$.getJSON("http://"+SERVERIP+":8000/ex_this?username="+username+"&action=remove", function(result){
 						$("#stattxt").text(username+' was removed from the exclustion list.');
 						$("#exlist").html("");
 					});
