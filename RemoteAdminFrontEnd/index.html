@@ -9,20 +9,24 @@ $(document).ready(function(){
 
     $("#getdup").click(function(){
         $.getJSON("http://"+SERVERIP+":8000/get_dup", function(result){
-			$("#main").html('');
+			$("#main").html('<ul>');
+			$("#stattxt").text('List of duplicate logs received.');
 			$.each( result, function( key, val ) {
 				username = key.split(" ")[0];
 				link = "<a href='#' class='dupitem'>"+username+ "</a>"
 				$("#main").append("<li>"+link+"</li>");
 			});
+			$("#main").append("</ul>");
 			$(".dupitem").click(function(){
 				username = $(this).text();
 				$(".selected").removeClass( "selected" );
 				$(this).addClass( "selected" );
 				$("#exusername").val(username);
+				$("#exnav").removeClass('hidden');
 				$.getJSON("http://"+SERVERIP+":8000/get_log?username="+username+"&compname=all", function(result){
 					$("#logview").html("");
 					$("#logview").append("<table>");
+					$("#stattxt").text('Log for user '+username+' received.');
 					$.each( result, function( key, val ) {
 					datetime = val.time;
 					datetime = datetime.split("_");
@@ -42,35 +46,65 @@ $(document).ready(function(){
 	 $("#getex").click(function(){
         $.getJSON("http://"+SERVERIP+":8000/ex_this?username=none&action=list&lvl=none", function(result){
 			$("#exlist").html("");
+			$("#stattxt").text('List of excluded users received.');
 			$.each( result, function( key, val ) {
 				username = val.username;
 				$("#exlist").append("<li>"+username+ "</li>");
 			});
         });
     });
-		 $("#addex").click(function(){
+	$("#addex").click(function(){
 		 un = $("#exusername").val();
         $.getJSON("http://"+SERVERIP+":8000/ex_this?username="+un+"&action=add&lvl=none", function(result){
-			username = result
+			username = JSON.stringify(result);
 			$("#exlist").append("<li>"+username+ "</li>");
+			$("#statbar").text(un+' was added to the exclustion list.');
         });
     });
-
+	$("#clearuser").click(function(){
+        $.getJSON("http://"+SERVERIP+":8000/db?action=clear", function(result){
+			if(result =1){
+				$("#main").html('');
+				$("#statbar").text('Cleared the usertable.');
+			}
+        });
+    });
 });
 </script>
 <style>
+* {
+
+	margin:0;
+	padding:0;
+	} 
+html, body {
+    max-height: 100%;
+	max-width:100%;
+	font-family: Sans-Serif;
+}
 ul {
   list-style-type: none;
 }
+li {
+  list-style-type: none;
+  	padding: .3em;
+	padding-left: 2em;
+}
+
 div{
+
 	float:left;
 	max-width:49%;
 	width:15em;
 	height:100%;
 	position: relative;
 }
+table, tr{
+	  margin-right: auto;
+  margin-left: 1em;;
+}
 td{
-	padding: .5em;
+	padding: .3em;
 	border-bottom: 1px solid #ddd;
 }
 .selected{
@@ -78,10 +112,12 @@ td{
 }
 a:link {
     text-decoration: none;
+	color:#000000;
 }
 
 a:visited {
     text-decoration: none;
+	color:#000000;
 }
 
 a:hover {
@@ -93,10 +129,54 @@ a:active {
     text-decoration: underline;
 	background-color: #cccccc;
 }
+#topnav {
+max-width: 99%;
+width:100%;
+height:1em;
+padding: .3em;
+border-bottom: 1px solid #ddd;
+}
+#topnav li {
+display: inline;
+}
+
+#main{
+	clear:left;
+	margin-top:1em;
+	border-right: 1px solid #ddd;
+}
+#exlist{
+	border-left: 1px solid #ddd;
+}
+#logview{
+	margin-top:1em;
+}
+#statbar{
+background-color: #ccccff;
+position: fixed;
+bottom: 0;
+left: 0;
+width: 100%;
+max-width: 100%;
+height:1.2em;
+clear:left;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+}
+.hidden{
+visibility: hidden;
+}
+#exusername {
+    border: none;
+	background-color: #cccccc;
+	padding: .3em;
+	border-radius: 5px;
+}
 </style>
 </head>
 <body>
-<ul>
+
 
 <!--
 <li><a href="#" id="getlog">Get Log</a> Username:<input id="username" value="all"/> Computername:<input id="compname" value="all"/></li>
@@ -105,18 +185,27 @@ a:active {
 <li><a href="#" id="clearex">Clear Exclusion List</a></li>
 
 -->
-<div id="leftpan" style="float:left;">
-<li><a href="#" id="getdup">Get Duplicates</a></li>
+<div id="topnav"><ul>
+	<li><a href="#" id="getdup">Get Duplicates</a></li>
+	<li><a href="#" id="getex" >Get Exclusion List</a></li>
+	<li><a href="#" id="clearuser" >Clear User Table</a></li>
+</ul></div>
+
 <div id="main"></div>
-</div>
+
 <div id="logview" style="width:30em;"></div>
+
 <div id="rightpan" style="float:right;">
-<ul id="exnav" style="width:100%;">
-		<li><a href="#" id="getex" >Get Exclusion List</a></li>
-		<li><input id="exusername"/><br/><a href="#" id="addex">Add to Exclusion List</a><li>
+	<ul id="exnav" style="width:100%;" class="hidden">
+		<li><input id="exusername"/><br/><a href="#" id="addex">Add to Exclusion List</a></li>
 	</ul>
-<div id="exlist">
+	<div id="exlist"></div>
 </div>
+
+<div id="statbar">
+<p id="stattxt">
+</p>
+</div>
+
 </body>
 </html>
-	
