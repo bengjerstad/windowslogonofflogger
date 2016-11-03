@@ -101,20 +101,21 @@ def db(hug_cors,action: hug.types.text, hug_timer=3):
 	conn.commit()
 	return 1
 
-@hug.get(examples='username=bgjerstad&action=add&lvl=dup')
+@hug.get(examples='username=bgjerstad&action=add')
 @hug.local()
-def ex_this(hug_cors,username: hug.types.text, action: hug.types.text, lvl: hug.types.text,hug_timer=3):
-	data = {'username':'{0}'.format(username),'action':'{0}'.format(action),'lvl':'{0}'.format(lvl)}
-	data2 = (username, lvl)
+def ex_this(hug_cors,username: hug.types.text, action: hug.types.text, hug_timer=3):
+	data = {'username':'{0}'.format(username),'action':'{0}'.format(action)}
+	data2 = (username)
 	logs = {}
 	dbkeys = ['username']
 	if (action == 'add'):
 		try:
-			c.execute("INSERT INTO exclude VALUES "+str(data2))
+			print("INSERT INTO exclude VALUES "+str(data2))
+			c.execute("INSERT INTO exclude VALUES ('"+str(data2)+"')")
 		except sqlite3.OperationalError:
 			makedb()
 			c.execute("INSERT INTO exclude VALUES "+str(data2))
-	data2 = (username, lvl)
+	data2 = (username)
 	if (action == 'remove'):
 		c.execute("DELETE FROM exclude WHERE username='"+str(data2[0])+"'")
 	if (action == 'list'):
@@ -134,6 +135,6 @@ def makedb():
 	conn = sqlite3.connect('users.db')
 	c = conn.cursor()
 	c.execute('''Create Table users (username text,compname text,stat text,time text)''')
-	c.execute('''Create Table exclude (username text, lvl text)''')
+	c.execute('''Create Table exclude (username text)''')
 	conn.commit()
 
