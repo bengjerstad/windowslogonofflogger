@@ -71,7 +71,9 @@ $(document).ready(function(){
 	$("#addex").click(function(){
 		 un = $("#exusername").val();
         $.getJSON("http://"+SERVERIP+":8000/ex_this?username="+un+"&action=add&lvl=none", function(result){
-			username = JSON.stringify(result);
+			//username = JSON.stringify(result);
+			//returns {"action":"add","username":"kshouse1","lvl":"none"}
+			username = result.username;
 			$("#exlist").append("<li>"+username+ "</li>");
 			$("#statbar").text(un+' was added to the exclustion list.');
         });
