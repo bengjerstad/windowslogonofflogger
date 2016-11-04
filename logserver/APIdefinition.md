@@ -57,7 +57,7 @@ Here's a definition of the API to help you get going :)",
             "/db": {
                 "GET": {
                     "examples": [
-                        "http://10.24.25.130:8000/db?action=clear"
+                        "http://10.24.25.130:8000/db?action=clearlog"
                     ],
                     "outputs": {
                         "format": "JSON (Javascript Serialized Object Notation)",
