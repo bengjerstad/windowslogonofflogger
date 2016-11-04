@@ -45,5 +45,11 @@ Full definiton at: windowslogonofflogger/logserver/APIdefinition.md
 **get_dup**: to get a list of users who have logged in at multiple computers. 
 
 **db**: allows for clearing the database
+   
+    http://[SERVER_IPADDRESS]:8000/db?action=clearlog - clear user log.
+    
+    http://[SERVER_IPADDRESS]:8000/db?action=clearex - clear exclusion list.
+     
+    http://[SERVER_IPADDRESS]:8000/db?action=clearall - Clear both. 
 
 **ex_this**: create a list of names to ingore in the get_dup function. 
