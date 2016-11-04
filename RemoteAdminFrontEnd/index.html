@@ -79,7 +79,7 @@ $(document).ready(function(){
         });
     });
 	$("#clearuser").click(function(){
-        $.getJSON("http://"+SERVERIP+":8000/db?action=clear", function(result){
+        $.getJSON("http://"+SERVERIP+":8000/db?action=clearlog", function(result){
 			if(result =1){
 				$("#main").html('');
 				$("#statbar").text('Cleared the usertable.');
