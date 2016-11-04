@@ -92,13 +92,26 @@ def get_dup(hug_cors,hug_timer=3):
 				lastcomp = row[0]
 	return logs
 
-@hug.get(examples='action=clear')
+@hug.get(examples='action=clearlog')
 @hug.local()
 def db(hug_cors,action: hug.types.text, hug_timer=3):
-	#drop the table then recreate it.
-	c.execute("DROP TABLE users")
-	c.execute('''Create Table users (username text,compname text,stat text,time text)''')
-	conn.commit()
+	if (action == 'clearlog'):
+		#drop the table then recreate it.
+		c.execute("DROP TABLE users")
+		c.execute('''Create Table users (username text,compname text,stat text,time text)''')
+		conn.commit()
+	if (action == 'clearex'):
+		#drop the table then recreate it.
+		c.execute("DROP TABLE exclude")
+		c.execute('''Create Table exclude (username text)''')
+		conn.commit()
+	if (action == 'clearall'):
+		#drop the table then recreate it.
+		c.execute("DROP TABLE users")
+		c.execute("DROP TABLE exclude")
+		c.execute('''Create Table users (username text,compname text,stat text,time text)''')
+		c.execute('''Create Table exclude (username text)''')
+		conn.commit()
 	return 1
 
 @hug.get(examples='username=bgjerstad&action=add')
