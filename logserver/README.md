@@ -32,12 +32,12 @@
 
 Full definiton at: windowslogonofflogger/logserver/APIdefinition.md
 
-log_this: to be used by scripts to log data into the database
+**log_this**: to be used by scripts to log data into the database
 
-get_log: to retrive all or parts of the log
+**get_log**: to retrive all or parts of the log
 
-get_dup: to get a list of users who have logged in at multiple computers. 
+**get_dup**: to get a list of users who have logged in at multiple computers. 
 
-db: allows for clearing the database
+**db**: allows for clearing the database
 
-ex_this: create a list of names to ingore in the get_dup function. 
+**ex_this**: create a list of names to ingore in the get_dup function. 
