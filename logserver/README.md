@@ -35,6 +35,12 @@ Full definiton at: windowslogonofflogger/logserver/APIdefinition.md
 **log_this**: to be used by scripts to log data into the database
 
 **get_log**: to retrive all or parts of the log
+   
+    http://[SERVER_IPADDRESS]:8000/get_log?username=bgjerstad&compname=011acboe
+    
+    http://[SERVER_IPADDRESS]:8000/get_log?username=all&compname=all
+     
+    http://[SERVER_IPADDRESS]:8000/get_log?username=bgjerstad&compname=all
 
 **get_dup**: to get a list of users who have logged in at multiple computers. 
 
