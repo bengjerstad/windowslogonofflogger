@@ -32,7 +32,7 @@ The python code pushes and pulls from a sqlite3 database file.
 
   Run:
   ```
-  hug -f 'home/admin/myapiwithdb.py'
+  hug -f 'home/admin/__init__.py'
   
   ```
   Test:
