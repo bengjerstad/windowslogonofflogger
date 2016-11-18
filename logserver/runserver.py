@@ -130,7 +130,7 @@ def ex_this(hug_cors,username: hug.types.text, action: hug.types.text, hug_timer
 			c.execute("INSERT INTO exclude VALUES "+str(data2))
 	data2 = (username)
 	if (action == 'remove'):
-		c.execute("DELETE FROM exclude WHERE username='"+str(data2[0])+"'")
+		c.execute("DELETE FROM exclude WHERE username='"+str(data2)+"'")
 	if (action == 'list'):
 			exlist = []
 			try:
