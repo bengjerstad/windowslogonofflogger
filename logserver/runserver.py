@@ -86,7 +86,8 @@ def get_dup(hug_cors,hug_timer=3):
 			for row in dbout:
 				if(row[2]==last and not(row[0]==lastcomp)):
 					#print(user,row)
-					thisis = user+row[1]
+					#thisis = user+row[1]
+					thisis = user
 					logs[thisis] = dict(zip(dbkeys,row))
 				last = row[2]
 				lastcomp = row[0]
@@ -150,3 +151,4 @@ def makedb():
 	c.execute('''Create Table users (username text,compname text,stat text,time text)''')
 	c.execute('''Create Table exclude (username text)''')
 	conn.commit()
+
