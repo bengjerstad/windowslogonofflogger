@@ -2,6 +2,7 @@ import hug
 import json
 import sqlite3
 import pandas as pd
+import datetime as dt
 conn = sqlite3.connect('users.db')
 c = conn.cursor()
 
@@ -97,7 +98,20 @@ def get_dup(hug_cors,hug_timer=3):
 @hug.local()
 def db(hug_cors,action: hug.types.text, hug_timer=3):
 	if (action == 'clearlog'):
+		#create a backup
+		today = dt.datetime.now().isoformat()
+		backdb = sqlite3.connect('backupusers'+str(today)+'.db')
+		cback = backdb.cursor()
+		cback.execute('''Create Table users (username text,compname text,stat text,time text)''')
+		dbout = c.execute("SELECT * FROM users WHERE 1")
+		exlist = c.fetchall()
+		print(exlist[0])
+		cback.execute("INSERT INTO users VALUES "+str(exlist[0])+"")
+		#for x in exlist[0]:
+		#	print(x)
+		#	cback.execute("INSERT INTO users VALUES "+x+"")
 		#drop the table then recreate it.
+		
 		c.execute("DROP TABLE users")
 		c.execute('''Create Table users (username text,compname text,stat text,time text)''')
 		conn.commit()
