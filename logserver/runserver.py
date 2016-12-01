@@ -105,8 +105,11 @@ def db(hug_cors,action: hug.types.text, hug_timer=3):
 		cback.execute('''Create Table users (username text,compname text,stat text,time text)''')
 		dbout = c.execute("SELECT * FROM users WHERE 1")
 		exlist = c.fetchall()
-		print(exlist[0])
+		#print(exlist[0])
 		cback.execute("INSERT INTO users VALUES "+str(exlist[0])+"")
+		backdb.commit()
+		cback.close()
+		print('Backed up Users')
 		#for x in exlist[0]:
 		#	print(x)
 		#	cback.execute("INSERT INTO users VALUES "+x+"")
@@ -115,6 +118,7 @@ def db(hug_cors,action: hug.types.text, hug_timer=3):
 		c.execute("DROP TABLE users")
 		c.execute('''Create Table users (username text,compname text,stat text,time text)''')
 		conn.commit()
+		print('Dropped and Created table. ')
 	if (action == 'clearex'):
 		#drop the table then recreate it.
 		c.execute("DROP TABLE exclude")
